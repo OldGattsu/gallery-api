@@ -1,0 +1,32 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Write SSH key
+        shell: bash
+        run: |
+          echo "${{ secrets.VPS_SSH_KEY }}" > id_ed25519
+          chmod 600 id_ed25519
+
+      - name: Deploy via SSH
+        env:
+          GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        shell: bash
+        run: |
+          ssh -o StrictHostKeyChecking=no -i id_ed25519 "$VPS_USER@$VPS_HOST" '
+            docker login ghcr.io -u oldgattsu -p '"$GHCR_TOKEN"' &&
+            cd /opt/gallery &&
+            docker compose pull &&
+            docker compose up -d &&
+            docker system prune -f
+          '
+

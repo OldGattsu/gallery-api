@@ -79,7 +79,6 @@ pub fn create_router(config: AppConfig) -> Router {
         .route("/", get(root))
         .route("/health", get(health_check))
         .route("/files", get(get_files_list))
-        .route("/disk", get(get_disk_info))
         .route("/resource", get(get_resource))
         .with_state(config)
 }
