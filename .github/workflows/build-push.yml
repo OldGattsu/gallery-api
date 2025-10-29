@@ -26,4 +26,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ toLower(secrets.GHCR_USERNAME) }}/gallery:latest
+          tags: ghcr.io/OldGattsu/gallery:latest
