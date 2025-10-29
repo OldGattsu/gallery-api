@@ -6,7 +6,7 @@ COPY src ./src
 RUN cargo build --release
 
 # 2. Runtime stage (минимальный)
-FROM debian:bookworm-slпm
+FROM debian:bookworm-slim
 RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY --from=builder /app/target/release/gallery /app/gallery
